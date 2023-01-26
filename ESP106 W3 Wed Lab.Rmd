@@ -1,0 +1,51 @@
+---
+title: "Week3 Mon Lab"
+author: "Naomi"
+date: "2023-01-26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, eval=FALSE)
+```
+# ESP 106 Lab 3
+
+Monday, January 23, 2023
+
+## Graphing
+
+In this lab session, we will start by reading merging in data on economic development and indoor and outdoor air pollution. Then we will practice making some graphs with it.
+
+### Question 1
+
+Read in the three csv files: gdppercapitaandgini and airpollution
+
+Both data sets are from Our World in Data: ourworldindata.org
+
+-   The GDP data set has GDP per capita and the GINI index (a measure of income inequality: <https://en.wikipedia.org/wiki/Gini_coefficient>)
+
+-   The air pollution data set has death rates from indoor and outdoor air pollution - units are in deaths per 100,000 people
+
+    -   Indoor air pollution is the **Household Air Pollution from Solid Fuels**
+
+    -   Outdoor air pollution is split into **Particulate Matter** and **Ozone**
+
+gdppercapitaandgini and airpollution csv datasets are imported and renamed :
+
+-   gdppercapitaandgini becomes **gdpgini**
+-   airpollution becomes **apol**
+
+```{r}
+View(gdpgini)
+View(apol)
+```
+
+*The column names are long and cumbersome (because they contain information about units, etc.) - you might want to rename some of the columns to make them easier to work with.*
+
+In that case, the columns are renamed to make them simpler.
+
+```{r}
+colnames(apol) <- c("Country","Code","Year","PM","Fuels","Ozone","Total")
+colnames(gdpgini) <- c("Country","Code","Year","Population","Continent","GINI","GDP")
+```
+

@@ -97,3 +97,15 @@ While each **type of air pollution** are distinguished by the **line types**:
 -   **Solid line** indicating **Outdoor Pollution**
 
 -   **Dash line** indicating **Indoor Pollution**
+
+### Question 3
+
+Merge the air pollution data with the GDP data using merge()
+
+Merge is a function that combines data across two data frames by matching ID rows. By default merge will identify ID rows as those where column names are the same between data sets, but it is safer to specify the columns you want to merge by yourself using "by". In our case, we want to merge both by country (either the "Entity" or "Code" columns) and year columns. Note that by default, the merge function keeps only the entries that appear in both data frames - that is fine for this lab. If you need for other applications, you can change using the all.x or all.y arguments to the function - check out the documentation at ?merge
+
+Air Pollution data set ('apol') and GDP and GINI data set ('gdpgini') are merged into new data set entitled '**polgdp**'
+
+```{r}
+polgdp <- merge(apol, gdpgini)
+```

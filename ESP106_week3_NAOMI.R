@@ -19,9 +19,9 @@
 
 #Hint: The column names are long and cumbersome (because they contain information about units et) - you might want to rename some of the columns to make them easier to work with
 
-
 colnames(apol) <- c("Country","Code","Year","PM","Fuels","Ozone","Total")
 colnames(gdpgini) <- c("Country","Code","Year","Population","Continent","GINI","GDP")
+
 
 #2. Chose two countries that you are interested in and make a plot showing the death rates from
 ##indoor air pollution and outdoor air pollution (sum of particulate matter and ozone) over time
@@ -40,15 +40,15 @@ colnames(gdpgini) <- c("Country","Code","Year","Population","Continent","GINI","
 #Hint: you might have to set the y scale manually to make sure your plot is wide enough 
 ##to show both countries. You can do this using the "ylim" argument in plot
 
+#combining PM and Ozone to Outdoor Pollution
 apol$Out <- apol$PM + apol$Ozone
 
-#x = apol[apol$Code=="IDN",]
-#y = apol[apol$Code=="MYS",]
+#calling only data from Indonesia and Malaysia
 idn<-subset(apol, Code=="IDN")
 mys<-subset(apol, Code=="MYS")
 
-#plot(Year, OutdoorPollution)
-plot(Out ~ Year, data=idn, type="l", main="Deaths from Air Pollutions in Indonesia and in Malaysia", ylab="Deaths from Air Pollutions", ylim=c(0,100), col="red")
+#plotting (x=Year, y=Pollution)
+plot(Out ~ Year, data=idn, type="l", main="Deaths from Air Pollution in Indonesia and in Malaysia", ylab="Deaths from Air Pollution", ylim=c(0,100), col="red")
 lines(Out ~ Year, data=mys, col="blue")
 lines(Fuels ~ Year, data=idn, col="red", lty=2)
 lines(Fuels ~ Year, data=mys, col="blue", lty=2)
@@ -76,8 +76,7 @@ polgdp <- merge(apol, gdpgini)
 ##but it is only listed for the year 2015
 #If you are trying this and getting stuck ASK FOR HELP - there are some tips and tricks for making it easier 
 
-?plot
-#plot(cars, pch=i+1, cex=i, col=rainbow(3)[i])
-
-plot(Out~GDP, data=polgdp, log="x", col="green", ylim=c(0,300), ylab="Deaths from Air Pollutions", xlab="GDP in logarithmic scale", main="Relationship between GDP and Deaths caused by Air Pollutions")
+plot(Out~GDP, data=polgdp, log="x", col="green", ylim=c(0,300), ylab="Deaths from Air Pollution", xlab="GDP in logarithmic scale", main="Relationship between GDP and Deaths caused by Air Pollution")
 points(Fuels~GDP, data=polgdp, pch=4, col="orange")
+pollution <- c ('Outdoor Pollution', 'Indoor Pollution')
+legend('topright', pollution, pch=c(1,4), col=c("green","orange"))

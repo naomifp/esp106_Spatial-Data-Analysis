@@ -109,3 +109,20 @@ Air Pollution data set ('apol') and GDP and GINI data set ('gdpgini') are merged
 ```{r}
 polgdp <- merge(apol, gdpgini)
 ```
+
+### Question 4
+
+Make a plot with two subplots - one showing a scatter plot between log of per-capita GDP (x axis) and indoor air pollution death rate (y axis) and one showing log of per-capita GDP (x axis) and outdoor air pollution (y axis). Make sure to add appropriate titles to the plots and axes. Use ylim to keep the range of the y axis the same between the two plots - this makes it easier for the reader to compare across the two graphs.
+
+```{r}
+plot(Out~GDP, data=polgdp, log="x", col="green", ylim=c(0,300), ylab="Deaths from Air Pollution", xlab="GDP in logarithmic scale", main="Relationship between GDP and Deaths caused by Air Pollution")
+points(Fuels~GDP, data=polgdp, pch=4, col="orange")
+pollution <- c ('Outdoor Pollution', 'Indoor Pollution')
+legend('topright', pollution, pch=c(1,4), col=c("green","orange"))
+```
+
+Each **type of air pollution** are distinguished by the **point colors and types**:
+
+-   [**Green dots**]{style="color: green;"} indicating **Outdoor Pollution**
+
+-   [**Orange cross**]{style="color: orange;"} indicating **Indoor Pollution**

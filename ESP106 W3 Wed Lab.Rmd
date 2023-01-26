@@ -49,3 +49,51 @@ colnames(apol) <- c("Country","Code","Year","PM","Fuels","Ozone","Total")
 colnames(gdpgini) <- c("Country","Code","Year","Population","Continent","GINI","GDP")
 ```
 
+### Question 2
+
+Choose two countries that you are interested in and make a plot showing the death rates from indoor air pollution and outdoor air pollution (summary of particulate matter and ozone) over time. Distinguish the countries using different colored lines and the types of pollution using different line types. Make sure to add a legend and appropriate titles for the axes and plot.
+
+*Various country names can be seen using unique(x\$Entity) where x is the data frame containing the air pollution data. Then create two new data frames that contain only the rows corresponding to each of the two countries you want to look at. Create a new column of total outdoor air pollution deaths by summing death rates from particulate matter and ozone. Use these to make your plot and add the lines you need. The y scale might have to be set manually to make sure the plot is wide enough to show both countries. It can be done by using the "ylim" argument in plot.*
+
+Death caused by indoor pollution comes from Household Air Pollution from Solid Fuels under the column name of '**Fuels**'. Deaths caused by outdoor pollution are total of deaths caused by Particulate Matter and deaths caused by Ozone under the column names of '**PM**' and '**Ozone**'.
+
+```{r}
+apol$Out <- apol$PM + apol$Ozone
+```
+
+Data from 2 particular countries are extracted:
+
+1.  **Indonesia** -- Extracted by the code "IDN", then kept into 'idn' data set
+2.  **Malaysia** -- Extracted by the code "MYS", then kept into 'mys' data set
+
+```{r}
+idn <- subset(apol, Code=="IDN")
+mys <- subset(apol, Code=="MYS")
+```
+
+Graphic plot is made with condition below.
+
+-   **x axis** indicating **Year**
+
+-   **y axis** indicating **Number of deaths from Air Pollution**
+
+```{r}
+plot(Out ~ Year, data=idn, type="l", main="Deaths from Air Pollution in Indonesia and in Malaysia", ylab="Deaths from Air Pollution", ylim=c(0,100), col="red")
+lines(Out ~ Year, data=mys, col="blue")
+lines(Fuels ~ Year, data=idn, col="red", lty=2)
+lines(Fuels ~ Year, data=mys, col="blue", lty=2)
+countries <- c('Outdoor Pollution - Indonesia', 'Outdoor Pollution - Malaysia', 'Indoor Pollution - Indonesia', 'Indoor Pollution - Malaysia')
+legend('topright', countries, lty=c(1,1,2,2), col=c("red","blue"))
+```
+
+Each **countries** are distinguished by the **line color**:
+
+-   [**Red line**]{style="color: red;"} indicating data from **Indonesia**
+
+-   [**Blue line**]{style="color: blue;"} indicating data from **Malaysia**
+
+While each **type of air pollution** are distinguished by the **line types**:
+
+-   **Solid line** indicating **Outdoor Pollution**
+
+-   **Dash line** indicating **Indoor Pollution**

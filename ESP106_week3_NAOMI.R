@@ -19,6 +19,10 @@
 
 #Hint: The column names are long and cumbersome (because they contain information about units et) - you might want to rename some of the columns to make them easier to work with
 
+setwd("C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\W3 Lab")
+apol <- read.csv("airpollution.csv")
+gdpgini <- read.csv("gdppercapiandgini.csv")
+
 colnames(apol) <- c("Country","Code","Year","PM","Fuels","Ozone","Total")
 colnames(gdpgini) <- c("Country","Code","Year","Population","Continent","GINI","GDP")
 

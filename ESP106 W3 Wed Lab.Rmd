@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo=TRUE, eval=FALSE)
+# knitr::opts_chunk$set(echo=TRUE, eval=FALSE)
 ```
 
 # ESP 106 Lab 3
@@ -37,8 +37,15 @@ gdppercapitaandgini and airpollution csv datasets are imported and renamed :
 -   airpollution becomes **apol**
 
 ```{r}
-View(gdpgini)
-View(apol)
+setwd("C:\\Users\\Benny Panjaitan\\Documents\\MS TTP UC Davis\\WINTER 2023\\ESP 106 Environmental Data Science")
+apol <- read.csv("airpollution.csv")
+gdpgini <- read.csv("gdppercapiandgini.csv")
+```
+
+
+```{r}
+str(gdpgini)
+dim(apol)
 ```
 
 *The column names are long and cumbersome (because they contain information about units, etc.) - you might want to rename some of the columns to make them easier to work with.*

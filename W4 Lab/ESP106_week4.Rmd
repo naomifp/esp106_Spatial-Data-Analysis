@@ -22,6 +22,11 @@ Before you start: add this file to your github repository, and commit your chang
 
 1. Create a data frame containing data on the city name and tide gauge ID
 
+```{r}
+id <- data.frame(city=c("Boston", "New York", "Baltimore", "Charleston", "Miami", "Corpus Christi"), gauge=c("8443970","8518750","8574680","8665530","8723214","8775296"))
+```
+
+
 2a. Use a for-loop to read in the csv files and bind them together into a single data frame. Add a column to the data frame giving the name of the city the data is from.
 
 ```{r}

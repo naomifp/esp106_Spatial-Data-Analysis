@@ -93,7 +93,7 @@ Make sure to add proper axis labels and units (using +labs(x="",y=""))
 library(ggplot2) 
 
 ggplot(allgauge, aes(x=Date, y=MHHW, groups=City, color=City)) +
-          geom_line() + geom_smooth(method="lm", inherit.aes=FALSE) + labs(x="Date", y="Average Daily High Water Level")
+          geom_line() + geom_smooth(method="lm") + labs(x="Date", y="Average Daily High Water Level (m above MHHW)")
 ```
 
 5. Now make a slightly different plot with the same x and y variables, but use facet_wrap() to make a subplot separately for each city. Add a best-fit line for each subplot. See the example plot uploaded to Canvas (Plot 2)
@@ -113,7 +113,8 @@ In this part of the lab we will identify some outliers, and practice running reg
 6. Make a box plot showing the distribution of the highest tides each month ("Highest" column in the NOAA data) . (Ideally practice using ggplot by using geom_boxplot() - put the city on the x axis and Highest on the y. But this can also be done in base R). See the example plot on Canvas (Plot 3)
 
 ```{r}
-
+ggplot(allgauge, aes(x=City, y=Highest)) +
+          geom_boxplot() + labs(x="City", y="Monthly Highest Tide (m above MHHW)")
 ```
 
 Notice the very extreme value in New York City - a major outlier both within New York and compared to all the other cities

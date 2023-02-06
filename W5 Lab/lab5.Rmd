@@ -5,7 +5,7 @@ output: html_document
 
 ```{r setup, include=FALSE, echo=FALSE}
 require("knitr")
-opts_knit$set(root.dir = ) #use this to set your working directory so knitr understands it
+opts_knit$set(root.dir = "C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\W5 Lab\\") #use this to set your working directory so knitr understands it
 ```
 
 ## Lab 5

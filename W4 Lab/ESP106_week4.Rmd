@@ -123,7 +123,8 @@ Notice the very extreme value in New York City - a major outlier both within New
 
 ```{r}
 #Hint: The which.max() function might be useful here
-
+which.max(allgauge$Highest)
+#It shows that the row number #141 has the maximum data
 ```
 
 7b. What month and year did this outlier event occur in? What meteorological event happened in New York in that month that probably caused this outlier event? (Feel free to use Google - I don't expect you to know this off hand)

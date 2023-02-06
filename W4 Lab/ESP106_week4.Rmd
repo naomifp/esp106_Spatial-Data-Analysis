@@ -41,7 +41,11 @@ id <- data.frame(city=c("Boston", "New York", "Baltimore", "Charleston", "Miami"
 ```
 
 ```{r}
-
+for(i in 1:length(gauge)) {                         
+  assign(paste0("", i),
+         read.csv2(paste0("C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\W4 Lab\\ESP106_week4_data\\",
+                          gauge [i])))
+}
 ```
 
 

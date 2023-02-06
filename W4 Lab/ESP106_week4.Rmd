@@ -143,13 +143,25 @@ Finally, we will fit a linear model to estimate the rate of sea-level rise acros
 #Hint: the formula in your lm() function is of the form y~x where y here is MHHW and x is your date column
 lin_mhhw <- lm(MHHW~Date, data=allgauge)
 lin_mhhw
+summary.lm(lin_mhhw)
 ```
 
 8b. Give the estimated coefficient of the date column. Is it statistically significant (i.e. has a p-value less than 0.05)?
 
 This coefficient gives us the average increase in high tide levels each day, across all six cities, for this ten year time frame (i.e. the units of the coefficient are in m per day).
 
+```{r}
+summary(lin_mhhw)$coefficients
+```
+Based on the above summary of Linear Regression of MHHW and Date relationship, the estimated coefficient of Date column is 0.00002732 with p-value of 5.314e-14, which is insignificant.
+
+
 8c. Using your estimated coefficient, estimate the mean increase in sea-level over the 10 year time frame from 2011-2020.
+
+```{r}
+
+```
+
 
 Upload your .Rmd file and you knitted file with the answers and plots to Canvas
 

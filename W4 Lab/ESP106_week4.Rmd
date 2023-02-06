@@ -41,11 +41,22 @@ id <- data.frame(city=c("Boston", "New York", "Baltimore", "Charleston", "Miami"
 ```
 
 ```{r}
-for(i in 1:length(gauge)) {                         
-  assign(paste0("", i),
-         read.csv2(paste0("C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\W4 Lab\\ESP106_week4_data\\",
-                          gauge [i])))
+gaugeid <- list.files("C:/Users/Benny Panjaitan/Documents/GitHub/esp106-Naomi/W4 Lab/ESP106_week4_data")  
+
+for(i in 1:length(gaugeid)) {                              
+  assign(paste0("gauge", i),                                   
+         read.csv(paste0("C:/Users/Benny Panjaitan/Documents/GitHub/esp106-Naomi/W4 Lab/ESP106_week4_data/",
+                          gaugeid[i])))
 }
+
+gauge1$City <- "Boston"
+gauge2$City <- "New York"
+gauge3$City <- "Baltimore"
+gauge4$City <- "Charleston"
+gauge5$City <- "Miami"
+gauge6$City <- "Corpus Christi"
+
+allgauge <- rbind(gauge1,gauge2,gauge3,gauge4,gauge5,gauge6)
 ```
 
 
@@ -65,7 +76,7 @@ Your data frame right now has one column with a year and one with the month. We 
 3b. Use as.Date to convert your new date column to a date object in R
 
 ```{r}
-
+allgauge$Date <- as.Date(paste(allgauge$Year,allgauge$Month,"1",sep="-"))
 
 ```
 
@@ -74,19 +85,24 @@ Now lets use ggplot to make some cool graphs of this data using ggplot.
 4. Make a plot showing data from all 6 gauges on the same plot. Use different colors to distinguish lines for the different cities. See the example plot uploaded to Canvas (Plot 1)
 
  * Plot the date on the x axis and MHHW (mean higher high water - i.e. the average daily high water level) on the y axis
-Make sure to add proper axis labes and units (using +labs(x="",y=""))
- * Add a single best-fit line through the full data set using geom_smooth(method="lm") - note that by default ggplot will fit one best fit line for each city. To override this specify the aestetic mapping (aes()) again within the geom_smooth function and add the argument inherit.aes=FALSE
+Make sure to add proper axis labels and units (using +labs(x="",y=""))
+ * Add a single best-fit line through the full data set using geom_smooth(method="lm") - note that by default ggplot will fit one best fit line for each city. To override this specify the aesthetic mapping (aes()) again within the geom_smooth function and add the argument inherit.aes=FALSE
  
 ```{r, message=FALSE, warning=FALSE}
 #if you don't already have ggplot2 then install it with install.packages("ggplot2")
 library(ggplot2) 
 
+ggplot(allgauge, aes(x=Date, y=MHHW, groups=City, color=City)) +
+          geom_line() + geom_smooth(method="lm", inherit.aes=FALSE) + labs(x="Date", y="Average Daily High Water Level")
 ```
 
 5. Now make a slightly different plot with the same x and y variables, but use facet_wrap() to make a subplot separately for each city. Add a best-fit line for each subplot. See the example plot uploaded to Canvas (Plot 2)
 
 ```{r, message=FALSE}
 #Hint: you should only need minor modification of the code from question 4 to make this plot
+
+ggplot(allgauge, aes(x=Date, y=MHHW, groups=City, color=City)) +
+          geom_line() + geom_smooth(method="lm") + labs(x="Date", y="Average Daily High Water Level") + facet_wrap(~City)
 
 ```
 

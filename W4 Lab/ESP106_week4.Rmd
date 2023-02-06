@@ -124,10 +124,16 @@ Notice the very extreme value in New York City - a major outlier both within New
 ```{r}
 #Hint: The which.max() function might be useful here
 which.max(allgauge$Highest)
-#It shows that the row number #141 has the maximum data
 ```
+It shows that the row number #141 has the maximum data.
 
 7b. What month and year did this outlier event occur in? What meteorological event happened in New York in that month that probably caused this outlier event? (Feel free to use Google - I don't expect you to know this off hand)
+
+```{r}
+allgauge[141,]
+```
+It is found that on row number #141, the outlier data happened on October 2012.
+On October 29-30, 2012, there was a Hurricane Sandy on New York.
 
 Finally, we will fit a linear model to estimate the rate of sea-level rise across these 6 cities.
 

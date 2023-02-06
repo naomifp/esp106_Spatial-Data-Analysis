@@ -23,7 +23,9 @@ Before you start: add this file to your github repository, and commit your chang
 1. Create a data frame containing data on the city name and tide gauge ID
 
 ```{r}
-id <- data.frame(city=c("Boston", "New York", "Baltimore", "Charleston", "Miami", "Corpus Christi"), gauge=c("8443970","8518750","8574680","8665530","8723214","8775296"))
+gauge <- list.files("C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\W4 Lab\\ESP106_week4_data")
+
+id <- data.frame(city=c("Boston", "New York", "Baltimore", "Charleston", "Miami", "Corpus Christi"), gauge)
 ```
 
 
@@ -37,6 +39,11 @@ id <- data.frame(city=c("Boston", "New York", "Baltimore", "Charleston", "Miami"
 #Hint 3: It will be easiest to add the names of the city to the data frames immediately after reading them in, before binding everything together into a single data-frame 
 
 ```
+
+```{r}
+
+```
+
 
 2b. Take a look at your data frame - is this in a tidy format?
 

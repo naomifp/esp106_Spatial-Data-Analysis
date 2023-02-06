@@ -142,6 +142,7 @@ Finally, we will fit a linear model to estimate the rate of sea-level rise acros
 ```{r}
 #Hint: the formula in your lm() function is of the form y~x where y here is MHHW and x is your date column
 lin_mhhw <- lm(MHHW~Date, data=allgauge)
+lin_mhhw
 ```
 
 8b. Give the estimated coefficient of the date column. Is it statistically significant (i.e. has a p-value less than 0.05)?

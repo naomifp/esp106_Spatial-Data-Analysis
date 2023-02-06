@@ -142,7 +142,6 @@ Finally, we will fit a linear model to estimate the rate of sea-level rise acros
 ```{r}
 #Hint: the formula in your lm() function is of the form y~x where y here is MHHW and x is your date column
 lin_mhhw <- lm(MHHW~Date, data=allgauge)
-lin_mhhw
 summary.lm(lin_mhhw)
 ```
 
@@ -159,8 +158,14 @@ Based on the above summary of Linear Regression of MHHW and Date relationship, t
 8c. Using your estimated coefficient, estimate the mean increase in sea-level over the 10 year time frame from 2011-2020.
 
 ```{r}
-
+#y=ax+b
+lin_mhhw
 ```
+So, the linear equation for the the annual time frame will be 
+MHHW = 2.732e-05(Date) - 0.3399
+
+And the linear equation for the the 10-year time frame will be
+MHHW = 2.732e-05(Date) - 3.399
 
 
 Upload your .Rmd file and you knitted file with the answers and plots to Canvas

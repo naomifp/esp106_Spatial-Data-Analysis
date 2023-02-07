@@ -93,7 +93,9 @@ Make sure to add proper axis labels and units (using +labs(x="",y=""))
 library(ggplot2) 
 
 ggplot(allgauge, aes(x=Date, y=MHHW, groups=City, color=City)) +
-          geom_line() + geom_smooth(method="lm") + labs(x="Date", y="Average Daily High Water Level (m above MHHW)")
+  geom_line() + 
+  geom_smooth(method="lm", aes(x=Date, y=MHHW), inherit.aes = FALSE, col="black") + 
+  labs(x="Date", y="Average Daily High Water Level (m above MHHW)")
 ```
 
 5. Now make a slightly different plot with the same x and y variables, but use facet_wrap() to make a subplot separately for each city. Add a best-fit line for each subplot. See the example plot uploaded to Canvas (Plot 2)
@@ -152,21 +154,19 @@ This coefficient gives us the average increase in high tide levels each day, acr
 ```{r}
 summary(lin_mhhw)$coefficients
 ```
-Based on the above summary of Linear Regression of MHHW and Date relationship, the estimated coefficient of Date column is 0.00002732 with p-value of 5.314e-14, which is insignificant.
+Based on the above summary of Linear Regression of MHHW and Date relationship, the estimated coefficient of Date column is 0.00002732 with p-value of 5.314e-14 (less than 0.05), which is significant.
 
 
 8c. Using your estimated coefficient, estimate the mean increase in sea-level over the 10 year time frame from 2011-2020.
 
 ```{r}
-#y=ax+b
 lin_mhhw
+
+2.732/(10^5)*365*10-0.3399
 ```
-So, the linear equation for the the annual time frame will be 
-MHHW = 2.732e-05(Date) - 0.3399
-
-And the linear equation for the the 10-year time frame will be
-MHHW = 2.732e-05(Date) - 3.399
-
+The linear equation for the the annual time frame is 
+*MHHW = 2.732e-05(Date) - 0.3399*
+And the mean increase in sea-level over the 10 year time frame from 2011-2020 is *-0.240182*
 
 Upload your .Rmd file and you knitted file with the answers and plots to Canvas
 

@@ -19,7 +19,7 @@ I have done some pre-processing of the data for you for this lab, to create two 
 First read in the countrytotals.csv data frame
 ```{r echo=FALSE}
 setwd("C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\W5 Lab\\ESP106_week5_data")
-country <- read.csv("countrytotals.csv")
+tidytue <- read.csv("countrytotals.csv")
 
 ```
 
@@ -35,15 +35,14 @@ Have a look at the data frame. Then column "total" gives the total number of pie
 
 **Answer:** 
 ```{r}
-t <- country[order(country$total, 
-                   decreasing=TRUE),]
-head (t)
+head (tidytue[order(tidytue$total, 
+                   decreasing=TRUE),])
 ```
 Another way to show this using dplyr package is by using top_n function to pick 5 countries with highest "total" value, then using arrange function to sort the countries in descending order.
 ```{r}
 library(dplyr)
 
-top5 <- arrange(top_n(country, 5, total), desc(total))
+top5 <- arrange(top_n(tidytue, 5, total), desc(total))
 top5
 
 ```

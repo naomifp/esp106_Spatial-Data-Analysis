@@ -12,13 +12,14 @@ opts_knit$set(root.dir = "C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-
 
 ### Due Tuesday Feb1st - Recommended to complete this before starting the midterm
 
-This lab we will look at some data from the plastic trash piced up during clean-up events around the world. I took this dataset from the Tidy Tuesday website. You can read the documentation [here](https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-01-26/readme.md), including the references and description of the different column names.
+This lab we will look at some data from the plastic trash picked up during clean-up events around the world. I took this data set from the Tidy Tuesday website. You can read the documentation [here](https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-01-26/readme.md), including the references and description of the different column names.
 
-I have done some pre-processing of the data for you for this lab, to create two more easy-to-use dataframes.
+I have done some pre-processing of the data for you for this lab, to create two more easy-to-use data frames.
 
 First read in the countrytotals.csv data frame
 ```{r echo=FALSE}
-
+setwd("C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\W5 Lab\\ESP106_week5_data")
+country <- read.csv("countrytotals.csv")
 
 ```
 
@@ -30,18 +31,27 @@ Have a look at the data frame. Then column "total" gives the total number of pie
 
 #hint order(datacolumn, decreasing=TRUE) will give you the ranking of the countries by the values in the data column
 #you can use this to re-order the country data frame, ordering it from the country with the most trash picked up to the least
-
-
-
-
 ```
 
 **Answer:** 
+```{r}
+t <- country[order(country$total, 
+                   decreasing=TRUE),]
+head (t)
+```
+Another way to show this using dplyr package is by using top_n function to pick 5 countries with highest "total" value, then using arrange function to sort the countries in descending order.
+```{r}
+library(dplyr)
 
-2. Make a plot showing the distribution of volunteers across coutnries
+top5 <- arrange(top_n(country, 5, total), desc(total))
+top5
+
+```
+
+
+2. Make a plot showing the distribution of volunteers across countries
 
 ```{r echo=FALSE}
-
 
 
 ```

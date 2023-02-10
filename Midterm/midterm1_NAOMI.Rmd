@@ -1,0 +1,226 @@
+---
+title: "Midterm One"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+library(knitr)
+```
+
+In this midterm we will analyze some data on the conservation status of
+species in North America and spending under the Endangered Species Act.
+
+Answer the following questions by using chunks of R code. Comment on
+what your code does. Make sure to add informative axis titles and, where
+appropriate, units to your answers. Upload the R markdown file and
+knitted output to Canvas.
+
+We will use the file `conservationdata.csv`. This data set has
+information on North American species. It has five variables that are
+described in the table below.
+
+```{r, echo=FALSE}
+tab <- cbind(Name=c("speciesid", "speciesname", "taxon", "conservation status", "listed"), Description = c("unique ID", "scientific name", "Species group", "Conservation status in North America, according to   [NatureServe](https://www.natureserve.org/conservation-tools/conservation-rank-calculator): 1 = Critically Imperiled; 2 = Imperiled; 3 = Vulnerable; 4 = Apparently Secure; 5 = Secure; UNK = Unknown; Prob. Extinct = Probably Extinct; Extinct", "Is the species listed as threatened or endangered under the US Endangered Species Act: 0 = No; 1 = Yes"))
+
+knitr::kable(tab, caption ='Table 1. Variables in "consevationdata.csv"' )
+```
+
+Read the file `conservationdata.csv`
+
+```{r}
+setwd("C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\Midterm")
+consdata <- read.csv("conservationdata.csv")
+```
+
+1.  What fraction of species in the data set are listed under the
+    Endangered Species Act? (2 points)
+
+```{r}
+all <- nrow(consdata)
+end <- nrow(consdata[consdata$listed == '1',])
+
+all/end
+end/all*100
+```
+
+<span style="color:orange">
+The fraction of species listed under the Endangered Species Act is
+**1/33.18367**, which means there is *1 endangered species for every
+33.18367 species*. Or, there are **3.01353%** species are listed under
+the Endangered Species Act.
+</span>
+
+2.  Show how many (absolute and relative) species there are for each
+    taxonomic group by making a data.frame in which the first column has
+    the taxonomic groups, the second column is the number of species in
+    that group, and the third column is the percentage of all species in
+    that group.
+
+```{r}
+tx <- as.data.frame(table(consdata$taxon))
+tx <- cbind(tx, tx$Freq/all*100)
+colnames(tx) <- c("Taxonomic Groups", "Number of Species", "Percentage (%)")
+tx
+```
+
+3a) One interesting question is how the conservation status varies
+between different taxonomic groups. Make a plot showing the relative
+distribution of conservation status within each taxonomic group. There
+should be descriptive legend (with words, not with the numeric codes) (3
+points)
+
+You can use a "base" plotting method, or ggplot. If you are using
+ggplot, stat="count" (counts up and plots the number of observations,
+i.e. species, within each group) and position="fill" might both be
+useful.
+
+```{r}
+ts <- data.frame (consdata$taxon, consdata$conservation_status)
+colnames(ts) <- c("Taxonomic Groups", "Conservation Status")
+
+library(ggplot2)
+ggplot(ts, aes(`Taxonomic Groups`, fill=`Conservation Status`)) + 
+    geom_bar(position="fill", stat="count") +
+    labs(title="Relative Distribution of Conservation Status for each Taxonomic Group", y = "Relative Numbers") +
+    scale_fill_discrete(labels = c("Critically Imperiled", "Imperiled", "Vulnerable", "Apparently Secure", "Secure", "Extinct", "Probably Extinct", "Unknown", "No Data"))
+
+```
+
+3b) Based on this graph, what is something we might be concerned about
+in terms of analyzing the data on conservation status, particularly for
+fungi and invertebrates? (1 point)
+
+**Answer:** 
+<span style="color:orange">
+There is a big proportion of Unknown (UNK) conservation status on Fungi and Invertebrates groups.
+</span>
+
+Read in the second data file: `spendingdata.csv`
+
+```{r}
+spend <- read.csv("spendingdata.csv")
+```
+
+This data set has a species ID that matches the species ID in the
+conservation data set (speciesid), year, and the spending on conservation
+of that species (expressed in 2015 dollars, i.e., accounting for
+inflation)
+
+4a) Make a plot showing the distribution of spending in the year 2016 (3
+points)
+
+```{r}
+sp2016 <- subset(spend, Year == "2016")
+
+ggplot(sp2016, aes(x=spending)) +
+  geom_density(fill="darkgreen", color="grey", alpha=0.8) +
+  labs(title="Distribution of Spending in 2016", x="Spending in 2016", y="Spending Density")
+```
+
+4b) Notice the (very) long right tail on spending data - we spend a lot
+on a very small number of species. Show the IDs of the 3 species with
+the most spending in 2016. (2 points)
+
+```{r}
+head (sp2016[order(sp2016$spending, decreasing=TRUE),])
+```
+
+<span style="color:orange">
+The 3 Species ID with most spending in 2016 are **#1632**, **#4486**, and **#1684**
+</span>
+
+5.  Merge in the data from the conservation status data frame to the
+    spending data frame, so that we have information on species names,
+    taxonomic group, and conservation status with the spending data. (2
+    points); and use that to show the scientific names of the three
+    species identified above.
+
+```{r}
+cosp <- merge(consdata, spend, by="speciesid")
+
+top1 <- cosp[which(cosp$Year == "2016" & cosp$speciesid == "1632"),]
+top2 <- cosp[which(cosp$Year == "2016" & cosp$speciesid == "4486"),]
+top3 <- cosp[which(cosp$Year == "2016" & cosp$speciesid == "1684"),]
+
+spc <- data.frame()
+spc <- rbind.data.frame(top1, top2, top3)
+spc
+
+```
+
+Look up these scientific names - what is the common name for these
+species?
+
+**Answer:** 
+```{r}
+spc <- subset(spc, select=c(1,2))
+name <- c("Chinook salmon", "Rainbow trout", "Coho salmon")
+spc <- cbind.data.frame(spc, name)
+colnames(spc) <- c("Species ID", "Species Name", "Common Name")
+spc
+```
+
+
+6.  Finally, we will use a regression to look at the relationship
+    between spending and species taxon.
+
+Because the distribution of spending is very right-skewed, it would be a
+good idea to take the logarithm of spending before using it in a
+regression.
+
+Remember that log(0)=infinity. That means we have to drop observations
+with zero spending before taking the logarithm.
+
+a)  Drop the rows where spending == 0 from the data frame and then make
+    a new column with the logarithm (log()) of spending in each year. (2
+    points)
+
+Optional: Look at the distribution of the logged spending variable and
+see how it looks different from the plot you made in question 4a
+
+```{r}
+cslog <- cosp[cosp$spending!="0",]
+cslog <- transform(
+  cslog, log_spending = log(cslog$spending))
+
+ggplot(cslog, aes(x=log_spending)) +
+  geom_density(fill="darkgreen", color="grey", alpha=0.8) +
+  labs(title="Distribution of Spending from 2006 to 2016", x="Spending in Logarithmic Scale", y="Spending Density")
+
+```
+
+b)  Run a regression of logged spending on taxonomic group and print the
+    summary for the regression below (3 points)
+
+```{r}
+reg <- lm(log_spending~taxon, data=cslog)
+summary.lm(reg)
+```
+
+c)  The way to interpret these coefficients are as the fractional
+    difference in spending between the taxonomic group (e.g. Birds,
+    Fishes, etc) and the "dropped" group, where by default the dropped
+    group will be Amphibians. Positive numbers indicate that group has
+    more spent on it than Amphibians and negative numbers indicate it
+    has less spent on it.
+
+Based on your results in b, do we see statistically significant
+differences in spending between different taxonomic groups? If so, which
+kinds of species tend to have more spent on them and which have less? (1
+points)
+
+**Answer:**
+
+<span style="color:orange">
+Taxonomic group that have the most spend is **Mammals**. It is seen its Estimate number of **1.03077** that is the largest positive number of Estimate Coefficient. 
+</span>
+
+<span style="color:orange">
+Taxonomic group that have the least spend is **Plants**. It is seen its Estimate number of **-1.92320** that is the largest negative number of Estimate Coefficient.
+</span>
+
+7.  Push your R markdown file to your Github repository (2 points)

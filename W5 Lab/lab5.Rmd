@@ -1,31 +1,46 @@
 ---
 title: "Lab 5"
 output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
 require("knitr")
-opts_knit$set(root.dir = "C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\W5 Lab\\") #use this to set your working directory so knitr understands it
+opts_knit$set(root.dir = "C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\W5 Lab\\") 
+#use this to set your working directory so knitr understands it
 ```
 
 ## Lab 5
 
 ### Due Tuesday Feb1st - Recommended to complete this before starting the midterm
 
-This lab we will look at some data from the plastic trash picked up during clean-up events around the world. I took this data set from the Tidy Tuesday website. You can read the documentation [here](https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-01-26/readme.md), including the references and description of the different column names.
+This lab we will look at some data from the plastic trash picked up
+during clean-up events around the world. I took this data set from the
+Tidy Tuesday website. You can read the documentation
+[here](https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-01-26/readme.md),
+including the references and description of the different column names.
 
-I have done some pre-processing of the data for you for this lab, to create two more easy-to-use data frames.
+I have done some pre-processing of the data for you for this lab, to
+create two more easy-to-use data frames.
 
 First read in the countrytotals.csv data frame
-```{r echo=FALSE}
-setwd("C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\W5 Lab\\ESP106_week5_data")
+
+```{r}
+setwd("C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\W5 Lab\\ESP106_week5_data\\")
 tidytue <- read.csv("countrytotals.csv")
 
 ```
 
-Have a look at the data frame. Then column "total" gives the total number of pieces of plastic picked up in that country in 2020. The columns "num_events" and "volunteers" give the number of trash pick-up events and the number of volunteers in that country. We are going to use this to investigate where the plastic trash problem is worst.
+Have a look at the data frame. Then column "total" gives the total
+number of pieces of plastic picked up in that country in 2020. The
+columns "num_events" and "volunteers" give the number of trash pick-up
+events and the number of volunteers in that country. We are going to use
+this to investigate where the plastic trash problem is worst.
 
-1. What 5 countries had the worst plastic problem as measured by the number of pieces of trash picked up?
+1.  What 5 countries had the worst plastic problem as measured by the
+    number of pieces of trash picked up?
 
 ```{r echo=FALSE}
 
@@ -33,12 +48,18 @@ Have a look at the data frame. Then column "total" gives the total number of pie
 #you can use this to re-order the country data frame, ordering it from the country with the most trash picked up to the least
 ```
 
-**Answer:** 
+**Answer:**
+
 ```{r}
 head (tidytue[order(tidytue$total, 
                    decreasing=TRUE),])
 ```
-Another way to show this using dplyr package is by using top_n function to pick 5 countries with highest "total" value, then using arrange function to sort the countries in descending order.
+
+[ Another way to show this using dplyr package is by using top_n
+function to pick 5 countries with highest "total" value, then using
+arrange function to sort the countries in descending order.
+]{style="color:orange"}
+
 ```{r}
 library(dplyr)
 
@@ -47,55 +68,134 @@ top5
 
 ```
 
+[ Both ways show that 5 countries that have the worst plastic problem
+are: ]{style="color:orange"}
 
-2. Make a plot showing the distribution of volunteers across countries
+[ 1. Nigeria ]{style="color:orange"}
+
+[ 2. Philippines ]{style="color:orange"}
+
+[ 3. Switzerland ]{style="color:orange"}
+
+[ 4. India ]{style="color:orange"}
+
+[ 5. Togo ]{style="color:orange"}
+
+2.  Make a plot showing the distribution of volunteers across countries
 
 ```{r echo=FALSE}
+library(ggplot2)
 
+tidytue$country <- gsub('United States of America', 'USA', tidytue$country)
+tidytue$country <- gsub('United Kingdom of Great Britain & Northern Ireland', 'UK', tidytue$country)
+tidytue$country <- gsub('United Arab Emirates', 'UAE', tidytue$country) 
+
+
+ggplot(tidytue, aes(x=country, y=volunteers)) + 
+    geom_bar(stat = "identity") +
+    labs(title="Trash Picking-up Volunteers around the World", y = "Number of Volunteers", x = "Country") +
+    coord_flip()
 
 ```
 
-3. Notice that there is a lot of variation across countries in the number of volunteers involved in trash pickup. What problem might that cause for the interpretation of your answer to question 1?
+3.  Notice that there is a lot of variation across countries in the
+    number of volunteers involved in trash pickup. What problem might
+    that cause for the interpretation of your answer to question 1?
 
-**Answer:** 
+```{r}
+summary(tidytue$volunteers)
+```
 
-4. Add a column to the data frame creating a variable that should be more closely related to the presence of plastic pollution in the country
+**Answer:** [ As shown from the summary of Tidy Tuesday's Volunteers
+above, it is seen that the mean of 39,330 cannot represent the number of
+volunteers involved across countries because the range is to wide with
+minimum value of 12 and maximum value of 703,165.
+]{style="color:orange"}
+
+4.  Add a column to the data frame creating a variable that should be
+    more closely related to the presence of plastic pollution in the
+    country
 
 ```{r echo=FALSE}
-
-
+ratio <- tidytue$total/tidytue$num_events
+tidytue <- cbind(tidytue, ratio)
 
 ```
 
-5. What 5 countries have the worst plastic pollution, as measured by this new variable?
+[To better illustrate the the condition of plastic pollution in each
+countries, I add the variable of number of plastic trash picked up per
+picking-up events under the column of 'ratio'. ]{style="color:orange"}
+
+5.  What 5 countries have the worst plastic pollution, as measured by
+    this new variable?
 
 ```{r echo=FALSE}
-
+head (tidytue[order(tidytue$ratio, 
+                   decreasing=TRUE),])
 
 ```
 
-**Answer:** 
+**Answer:**
 
-Now we will make a plot of the variation in the types of trash and how it differs around the world. Read in the continenttypes.csv data frame. This gives the breakdown of the different types of plastic collected on each continet in 2020 and the total number of pick up events.
+[After including the new variable of average number of trash picked up
+per events, 5 countries that have the worst plastic pollution are:
+]{style="color:orange"}
+
+[ 1. Togo ]{style="color:orange"}
+
+[ 2. Burkina Faso ]{style="color:orange"}
+
+[ 3. Germany ]{style="color:orange"}
+
+[ 4. El Salvador ]{style="color:orange"}
+
+[ 5. Ghana ]{style="color:orange"}
+
+Now we will make a plot of the variation in the types of trash and how
+it differs around the world. Read in the continenttypes.csv data frame.
+This gives the breakdown of the different types of plastic collected on
+each continent in 2020 and the total number of pick up events.
+
+```{r}
+setwd("C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\W5 Lab\\ESP106_week5_data\\")
+contype <- read.csv('continenttypes.csv')
+
+library(ggplot2)
+ggplot(contype, aes(fill=plastic_type, y=total, x=continent)) + 
+    geom_bar(position="dodge", stat="identity") +
+    labs(title="Type of Plastic Trash around the World", y = "Numbers of Plastic Trash", x = "Continent") +
+    scale_fill_discrete(name = "Plastic Type", labels = c("Empty", "HDPE", "LDPE", "Other", "Polyester ", "Polypropylene", "Polystyrene", "PVC "))
+```
+
+6.  Add a column to this data frame with a variable that captures the
+    existence of different types of plastic trash, controlling for the
+    intensity of the pick-up effort in different continent
 
 ```{r echo=FALSE}
+te <- contype$total/contype$events
+contype <- cbind(contype, te)
+contype[, 6] <- round(contype[, 6], digits = 2)
+```
 
+[ I add new column of 'te' which shows how many plastic trash (for each
+type) picked up per event. ]{style="color:orange"}
+
+7.  Make a plot using ggplot showing both the total amount and
+    distribution of types of plastic picked up in each continent in the
+    average pick-up event.
+
+Hint: Check out options in the [R graph
+gallery](https://www.r-graph-gallery.com)
+
+```{r echo=FALSE}
+library(ggplot2)
+ggplot(contype, aes(fill=plastic_type, y=te, x=continent)) + 
+    geom_bar(position="stack", stat="identity") +
+    labs(title="Type of Plastic Trash Picked Up around the World", y = "Numbers of Plastic Trash picked up per Event", x = "Continent") +
+    scale_fill_discrete(name = "Plastic Type", labels = c("Empty", "HDPE", "LDPE", "Other", "Polyester ", "Polypropylene", "Polystyrene", "PVC "))
 
 ```
 
-6. Add a column to this data frame with a variable that captures the existence of different types of plastic trash, controlling for the intensity of the pick-up effort in different continent
-
-```{r echo=FALSE}
-
-```
-
-7. Make a plot using ggplot showing both the total amount and distribution of types of plastic picked up in each continent in the average pick-up event.
-
-Hint: Check out options in the [R graph gallery](https://www.r-graph-gallery.com)
-
-```{r echo=FALSE}
-
-```
-
-8. Try uploading your R markdown file and plot to your Git Hub repository. Don't put your knitted HTML file in Github - these are large files that are not designed to be stored on Github
-
+8.  Try uploading your R markdown file and plot to your Git Hub
+    repository. Don't put your knitted HTML file in Github - these are
+    large files that are not designed to be stored on Github

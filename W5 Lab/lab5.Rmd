@@ -1,8 +1,10 @@
 ---
 title: "Lab 5"
-output: html_document
-editor_options: 
-  markdown: 
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  markdown:
     wrap: 72
 ---
 
@@ -55,10 +57,10 @@ head (tidytue[order(tidytue$total,
                    decreasing=TRUE),])
 ```
 
-[ Another way to show this using dplyr package is by using top_n
-function to pick 5 countries with highest "total" value, then using
-arrange function to sort the countries in descending order.
-]{style="color:orange"}
+[Another way to show this using dplyr package is by using top_n function
+to pick 5 countries with highest "total" value, then using arrange
+function to sort the countries in descending
+order.]{style="color:orange"}
 
 ```{r}
 library(dplyr)
@@ -68,18 +70,18 @@ top5
 
 ```
 
-[ Both ways show that 5 countries that have the worst plastic problem
-are: ]{style="color:orange"}
+[Both ways show that 5 countries that have the worst plastic problem
+are:]{style="color:orange"}
 
-[ 1. Nigeria ]{style="color:orange"}
+[1. Nigeria]{style="color:orange"}
 
-[ 2. Philippines ]{style="color:orange"}
+[2. Philippines]{style="color:orange"}
 
-[ 3. Switzerland ]{style="color:orange"}
+[3. Switzerland]{style="color:orange"}
 
-[ 4. India ]{style="color:orange"}
+[4. India]{style="color:orange"}
 
-[ 5. Togo ]{style="color:orange"}
+[5. Togo]{style="color:orange"}
 
 2.  Make a plot showing the distribution of volunteers across countries
 
@@ -106,11 +108,10 @@ ggplot(tidytue, aes(x=country, y=volunteers)) +
 summary(tidytue$volunteers)
 ```
 
-**Answer:** [ As shown from the summary of Tidy Tuesday's Volunteers
+**Answer:** [As shown from the summary of Tidy Tuesday's Volunteers
 above, it is seen that the mean of 39,330 cannot represent the number of
 volunteers involved across countries because the range is to wide with
-minimum value of 12 and maximum value of 703,165.
-]{style="color:orange"}
+minimum value of 12 and maximum value of 703,165.]{style="color:orange"}
 
 4.  Add a column to the data frame creating a variable that should be
     more closely related to the presence of plastic pollution in the
@@ -124,7 +125,7 @@ tidytue <- cbind(tidytue, ratio)
 
 [To better illustrate the the condition of plastic pollution in each
 countries, I add the variable of number of plastic trash picked up per
-picking-up events under the column of 'ratio'. ]{style="color:orange"}
+picking-up events under the column of 'ratio'.]{style="color:orange"}
 
 5.  What 5 countries have the worst plastic pollution, as measured by
     this new variable?
@@ -138,18 +139,18 @@ head (tidytue[order(tidytue$ratio,
 **Answer:**
 
 [After including the new variable of average number of trash picked up
-per events, 5 countries that have the worst plastic pollution are:
-]{style="color:orange"}
+per events, 5 countries that have the worst plastic pollution
+are:]{style="color:orange"}
 
-[ 1. Togo ]{style="color:orange"}
+[1. Togo]{style="color:orange"}
 
-[ 2. Burkina Faso ]{style="color:orange"}
+[2. Burkina Faso]{style="color:orange"}
 
-[ 3. Germany ]{style="color:orange"}
+[3. Germany]{style="color:orange"}
 
-[ 4. El Salvador ]{style="color:orange"}
+[4. El Salvador]{style="color:orange"}
 
-[ 5. Ghana ]{style="color:orange"}
+[5. Ghana]{style="color:orange"}
 
 Now we will make a plot of the variation in the types of trash and how
 it differs around the world. Read in the continenttypes.csv data frame.
@@ -177,8 +178,8 @@ contype <- cbind(contype, te)
 contype[, 6] <- round(contype[, 6], digits = 2)
 ```
 
-[ I add new column of 'te' which shows how many plastic trash (for each
-type) picked up per event. ]{style="color:orange"}
+[I add new column of 'te' which shows how many plastic trash (for each
+type) picked up per event.]{style="color:orange"}
 
 7.  Make a plot using ggplot showing both the total amount and
     distribution of types of plastic picked up in each continent in the

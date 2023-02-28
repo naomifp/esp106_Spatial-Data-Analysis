@@ -28,8 +28,8 @@ The first part of the lab will compare modeled and observed climate data for maj
 library(terra)
 setwd("C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\W7 Lab\\Data")
 
-filename <- list.files("Climate Model Data_Historic", pattern="nc$", full.names=TRUE)
-hc <- rast(filename, "TREFHT")
+hist_clim <- list.files("Climate Model Data_Historic", pattern="nc$", full.names=TRUE)
+hc <- rast(hist_clim, "TREFHT")
 hc
 ```
 
@@ -98,24 +98,27 @@ hc
 3a. Read in the observed temperature data as a SpatRaster, using "tmp" for the sub-dataset argument
 
 ```{r}
-
+setwd("C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\W7 Lab\\Data")
+obs_temp <- list.files("Observed Temp Data", pattern="nc$", full.names=TRUE)
+ot <- rast(obs_temp, subds="tmp", lyrs=NULL, drivers=NULL, opts=NULL, win=NULL)
+ot
 ```
 
 3b. Note that this climate model data is for 1920-2005 but the observation data is only from 1991-2000. Subset the climate model data to just the years 1991-2000. Also change the units to match those of the observed climate data.
 
 ```{r}
 # hint: have a look at ?terra::time to see how to get years
-timeInfo(hc)
+terra::time(hc, format="years")
 
-time(hc, format="years")
-
+hco <- subset(hc, 852:971)
+hco
 ```
 
 4. Use terra::extract() to produce two data-frames, one with observed and one with modeled temperature values for each city. 
 
 ```{r}
-city_obs <- extract( ___, ___, ID=FALSE)
-city_sim <- extract( ___, ___. ID=FALSE)
+city_obs <- extract( hco, pop10, ID=FALSE)
+city_sim <- extract( hc, pop10, ID=FALSE)
 ```
 
 We have to do a bit of data-wrangling to compare modeled and observed temperature data for each city.

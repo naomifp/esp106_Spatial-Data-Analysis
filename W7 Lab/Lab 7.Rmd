@@ -79,7 +79,7 @@ pop10$NAME
 2b. Make a plot of the temperature data for January 1920 and overlay the 10 major cities.
 
 ```{r}
-plot(hc[[1]])
+plot(hc[[1]], main="Temperature of 10 Most Populous Cities in January 1920")
 points(pop10)
 ```
 
@@ -192,8 +192,20 @@ In the second part of the lab, we will use projections of future temperature cha
 6a. Read in the netCDF file with projected climate model temperature (in the "Climate Model Data_Future" directory) as a SpatRaster. Use the rotate() function again as you did in 1b to transform the coordinates to -180 to 180 and the units to C. Use `subds="TREFHT"`. This has gridded projections of monthly global temperature between 2006 and 2020 under a high-emissions scenario (referred to as RCP8.5).
 
 ```{r}
+#read the projected climate model temperature
+setwd("C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\W7 Lab\\Data")
+futr_clim <- list.files("Climate Model Data_Future", pattern="nc$", full.names=TRUE)
+fc <- rast(futr_clim, "TREFHT")
 
+#rotate the coordinates to -180 to 180
+fc <- rotate(fc)
 
+#change the units from Kelvin to Celcius degree
+fc <- (fc-273.15)
+units(fc) <- "C"
+
+#check the SpatRaster of Climate Model in the Future (fc)
+fc
 ```
 
 6b. Compute the projected _annual_ trend in global climate. Use `tapp` for this temporal aggregation.

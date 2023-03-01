@@ -211,14 +211,20 @@ fc
 6b. Compute the projected _annual_ trend in global climate. Use `tapp` for this temporal aggregation.
 
 ```{r}
-
+tapp(fc, index="years", fun=mean)
 
 ```
 
 7a. Read in the netCDF data on population in the "Population" directory as a SpatRaster. (There is only one variable in this netCDF, so you do not need to specify the variable name this time). This is gridded population count at 15 arc minute resolution.
 
 ```{r}
+#read the data of population
+setwd("C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\W7 Lab\\Data")
+population <- list.files("Population", pattern="nc$", full.names=TRUE)
 
+#make a spatial raster data of population
+pplt <- rast(population)
+pplt
 
 ```
 

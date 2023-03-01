@@ -1,7 +1,9 @@
 ---
 title: "Lab 6"
-output: html_document
-editor_options: 
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
   chunk_output_type: inline
 ---
 
@@ -137,45 +139,15 @@ There are 2,496 observations in west coast MPAs, which makes the fraction of obs
 11) Find what fraction of blue whales in the dataset spend at least some time in one of these west coast MPAs.
 
 ```{r}
-w <-  tapply(bluew$calc_freq, bluew$ind_ident, function(x) x)
+in_wco <- c(1:length(unique(bluew$ind_ident)))
+
+for (i in c(1:length(unique(bluew$ind_ident)))) {
+  in_wco[i] <- TRUE %in% is.related(bluew[which(bluew$ind_ident==unique(bluew$ind_ident)[i])], wco, "intersects")
+}
+
+length(which(in_wco==TRUE)) / length(unique(bluew$ind_ident))
 ```
 
-To know the number of individual blue whales that at least once come to West Coast MPAs, I look first for the number of individual blue whales in all MPAs which has result of 141 individual blue whales.
-
-```{r}
-ind <- as.data.frame(rownames(w))
-colnames(ind)<-'ind'
-
-iw <- subset(bluew, bluew$ind_ident == ind$ind)
-nrow(iw)
-nrow(w)
-nrow(iw)/nrow(w)
-```
-
-```{r}
-g <- is.related(iw, wco, "intersects")
-y = table(g)
-table(g)
-y[2] / sum(y)
-```
-
-```{r}
-y[2]
-nrow(w)
-y[2] / nrow(w)
-```
-
-Then, I explore 3 ways to obtain the fraction of individual blue whales that once enter west coast MPAs which resulted as listed below.
-
-1.  0.78 from 110/141
-
-2.  0.15 from 16/110
-
-3.  0.11 from 16/141
-
-I suspect there is abnormality in the logic of subset function I use, which results in only 110 individual blue whales, not 141 as I expect.
-
-\--
 
 12. Create a raster with counts of blue whale observations along the California coast. Use the spatial extent we used for the mpa data (question 8) and use a spatial resolution of 1/6th of a degree. First create an empty SpatRaster. Then use `rasterize`
 
@@ -202,11 +174,11 @@ distance(r)
 15) For each blue whale observation, find the distance to the coast based on this raster (use "extract"). Make a histogram of the distribution.
 
 ```{r}
-t <- extract(r, bluew)
+dist <- terra::extract(r, bluew)
 
 library(ggplot2)
 
-ggplot(t, aes(x=count)) + 
+ggplot(dist, aes(x=count)) + 
   geom_histogram(bins=30, fill="turquoise", color="#e9ecef", alpha=0.9) +
   ggtitle("Distribution of Blue Whale Observation") +
   labs(x="Blue Whale Observation", y="Frequency")

@@ -71,7 +71,8 @@ class(pop)
 
 ```{r}
 pop10 <- pop[order(pop$POP2020, decreasing = TRUE), ]
-pop10$NAME[1:10]
+pop10 <- pop10[1:10,]
+pop10$NAME
 ```
 
 
@@ -117,8 +118,8 @@ hco
 4. Use terra::extract() to produce two data-frames, one with observed and one with modeled temperature values for each city. 
 
 ```{r}
-city_obs <- extract( hco, pop10, ID=FALSE)
-city_sim <- extract( hc, pop10, ID=FALSE)
+city_obs <- terra::extract(ot, pop10, ID=FALSE)
+city_sim <- terra::extract(hco, pop10, ID=FALSE)
 ```
 
 We have to do a bit of data-wrangling to compare modeled and observed temperature data for each city.
@@ -131,19 +132,22 @@ city_sim$ID <- NULL
 
 city_obs <- data.frame(t(city_obs))
 city_sim <- data.frame(t(city_sim))
-colnames(city_obs) <- __________
-colnames(city_sim) <- __________
-city_obs$time <- time(__________)
-city_sim$time <- time(__________)
+
+colnames(city_obs) <- pop10$NAME
+colnames(city_sim) <- pop10$NAME
+
+city_obs$time <- time(ot)
+city_sim$time <- time(hco)
 ```
 
 5b. Use pivot_longer() from the tidyr package to turn both data-frames into tidy data-frames, with one row for each unique city-month combination
 
 ```{r}
 #Hint: you want to use the first 10 columns (cities) to pivot (cols argument in the pivot_longer function). Use the values_to argument to name the temperature data column either "observed" or "simulated".
+library(tidyr)
 
-city_obs <- ________
-city_sim <- ________
+city_obs <- pivot_longer(city_obs, cols=1:10, values_to="observed")
+city_sim <- pivot_longer(city_sim, cols=1:10, values_to="simulated")
 
 ```
 
@@ -154,6 +158,10 @@ To merge the two data frames together, first we need to "chop off" the last two 
 change the variable "time" from Date to "yearmon" (character)
 
 ```{r}
+city_obs$time <- substr(city_obs$time,1,7)
+city_sim$time <- substr(city_sim$time,1,7)
+
+#sub("-02"," Feb", city_obs$time)
 
 ```
 
@@ -162,14 +170,19 @@ change the variable "time" from Date to "yearmon" (character)
 ```{r}
 #Hint: you will want to specify two columns in the "by" argument in merge(). Think about what two columns those should be (i.e. what combination of columns identifies a unique observation that matches across the two dataframes)
 
-
+city_merge <- data.frame ()
+city_merge <- merge.data.frame(city_obs, city_sim, by = c("time", "name"))
 ```
 
 5e. Make a plot showing observed vs modeled temperature for the 10 cities. Add a 1:1 line which showing the exact match between observed and modeled data. You can use base plot or ggplot.
 
 ```{r}
-
-
+?ggplot2
+#library(ggplot2)
+ggplot(city_merge, aes(x=observed, y=simulated, color=name)) +
+  geom_point() +
+  geom_smooth(method=lm , color="black", se=F) +
+  labs(title="Temperature in 10 Most Populous Cities", x="Monthly Observed Temperature in 1991-2000 (°C)", y="Monthly Simulated Temperature in 1991-2000 (°C)", color="City")
 ```
 
 #Part 2

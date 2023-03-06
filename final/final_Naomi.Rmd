@@ -14,19 +14,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # ESP 106 Final Project
 
-## Question 
+## Question
 
 Do Metropolitan Statistical Area (MSA) neighborhood status affect
 households' transportation mode choice?
 
-## Objective 
+## Objective
 
-The project aims to compare the transportation mode choice between
-households living in MSA category defined in NHTS.
+To compare the transportation mode choice between households living in
+different MSA category defined in NHTS.
 
-## Variables 
+## Variables
 
-### Independent variables: 
+### Independent variables:
 
 Metropolitan Statistical Area (MSA) neighborhood status:
 
@@ -38,7 +38,7 @@ Metropolitan Statistical Area (MSA) neighborhood status:
 
 4.  Not in MSA
 
-### Dependent variables: 
+### Dependent variables:
 
 Transportation mode choices:
 
@@ -76,10 +76,17 @@ Download the NHTS 2017 data set to personal GitHub cloud storage
 library(summarizeNHTS)
 download_nhts_data("2017", exdir="C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\final")
 dataset <- read_data("2017", csv_path="C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\final")
-statistic <- summarize_data(
-    data = dataset,
-    agg = "household_count",
-    by = c("HHSIZE","HHVEHCNT")
-)
-make_chart(statistic)
 ```
+
+Make data frames
+
+```{r}
+setwd("C:/Users/Benny Panjaitan/Documents/GitHub/esp106-Naomi/final")
+household <- read.csv("csv/2017/household.csv")
+
+msatrip <- data.frame(household$MSACAT, household$CAR)
+
+ggplot2::ggplot(msatrip, aes(x=household.MSACAT, y=household.CAR)) +  
+  geom_bar(stat="identity")
+```
+

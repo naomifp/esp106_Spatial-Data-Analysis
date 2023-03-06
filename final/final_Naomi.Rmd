@@ -1,0 +1,85 @@
+---
+title: "ESP106 Final Project"
+author: "Naomi"
+date: "2023-03-06"
+output: pdf_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# ESP 106 Final Project
+
+## Question 
+
+Do Metropolitan Statistical Area (MSA) neighborhood status affect
+households' transportation mode choice?
+
+## Objective 
+
+The project aims to compare the transportation mode choice between
+households living in MSA category defined in NHTS.
+
+## Variables 
+
+### Independent variables: 
+
+Metropolitan Statistical Area (MSA) neighborhood status:
+
+1.  MSA of 1 million or more population, with rail infrastructure
+
+2.  MSA of 1 million or more population, without rail infrastructure
+
+3.  MSA less than 1 million
+
+4.  Not in MSA
+
+### Dependent variables: 
+
+Transportation mode choices:
+
+1.  Car
+
+2.  Bus
+
+3.  Train
+
+4.  Taxi
+
+5.  Bike
+
+6.  Walk
+
+## Data Source
+
+[National Household Travel Survey 2017](https://nhts.ornl.gov/)
+
+[Data Summary of NHTS on
+GitHub](https://github.com/Westat-Transportation/summarizeNHTS.git)
+
+## Workflow
+
+Install 'devtools' package to download NHTS data set from GitHub
+
+```{r}
+install.packages('devtools')
+devtools::install_github('Westat-Transportation/summarizeNHTS')
+```
+
+Download the NHTS 2017 data set to personal GitHub cloud storage
+
+```{r}
+library(summarizeNHTS)
+download_nhts_data("2017", exdir="C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\final")
+dataset <- read_data("2017", csv_path="C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\final")
+statistic <- summarize_data(
+    data = dataset,
+    agg = "household_count",
+    by = c("HHSIZE","HHVEHCNT")
+)
+make_chart(statistic)
+```

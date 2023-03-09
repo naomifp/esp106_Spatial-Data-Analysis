@@ -94,7 +94,7 @@ Storing data summary of household trips count made in different Metropolitan are
 msatrip_sum <- summarize_data(
     data = nhts_data,
     agg = "trip_count",
-    label = TRUE,
+    label = F,
     by = c("MSACAT","CAR","TAXI","WALK","BIKE","BUS","TRAIN")
 )
 ```
@@ -126,7 +126,7 @@ head(msa_trip)
 3. Keeping only trip frequencies, eliminating all unknown or unspecified trip frequencies
 
 ```{r}
-msa_trip <- subset(msa_trip, TRIP %in% c("Daily", "A few times a week", "A few times a month", "A few times a year", "Never"))
+msa_trip <- subset(msa_trip, TRIP %in% c("01", "02", "03", "04", "05"))
 head(msa_trip)
 ```
 
@@ -144,7 +144,8 @@ head(msa_trip)
 Plotting the number of trips made in different metropolitan area category by transportation mode use.
 
 ```{r}
-ggplot(msa_trip, aes(x=MSACAT, y=N, fill=TRIP)) +  
+msa_trip %>%
+ggplot(aes(x=MSACAT, y=N, fill=TRIP)) +  
   geom_bar(position="stack", stat="identity") +
   facet_wrap(~MODE)  + 
   labs(title="Trips Made in Metropolitan Area by Transportation Mode", 
@@ -154,4 +155,6 @@ ggplot(msa_trip, aes(x=MSACAT, y=N, fill=TRIP)) +
         scale_x_discrete(label = function(MSACAT) lapply(strwrap(MSACAT, width = 20, simplify = FALSE), paste, collapse="\n")) +
         scale_y_continuous(label = scales::comma)
 ```
+
+
 

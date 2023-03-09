@@ -66,7 +66,7 @@ GitHub](https://github.com/Westat-Transportation/summarizeNHTS.git)
 Install 'devtools' package to download NHTS data set from GitHub
 
 ```{r}
-install.packages('devtools')
+# install.packages('devtools')
 devtools::install_github('Westat-Transportation/summarizeNHTS')
 ```
 
@@ -74,19 +74,61 @@ Download the NHTS 2017 data set to personal GitHub cloud storage
 
 ```{r}
 library(summarizeNHTS)
+
+setwd("C:/Users/Benny Panjaitan/Documents/GitHub/esp106-Naomi/final")
+
 download_nhts_data("2017", exdir="C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\final")
-dataset <- read_data("2017", csv_path="C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\final")
+
+nhts_data <- read_data("2017", csv_path="C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\final")
+
+summary(nhts_data$data)
 ```
+
+```{r}
+nhts_data$data$household
+```
+
+```{r}
+cd_var <- codebook_2017$variables
+cd_val <- codebook_2017$values
+car <- subset(cd_val, cd_val$NAME == "CAR")
+freq <- as.vector(car[4:8,3])
+```
+
+
+
+```{r}
+msa_trip <- summarize_data(
+    data = nhts_data,
+    agg = "trip_count",
+    label = TRUE,
+    by = c("MSACAT","CAR","TAXI","WALK","BIKE","BUS","TRAIN")
+)
+```
+
+```{r}
+msa_trip <- msa_trip[,-8:-10]
+catg <- catg[-1]
+freq
+```
+
+```{r}
+msa_trip <- tidyr::gather(msa_trip, key="MODE", value="TRIP", 2:7)
+msa_trip <- subset(msa_trip, TRIP %in% c("Daily", "A few times a week", "A few times a month", "A few times a year", "Never"))
+
+```
+
 
 Make data frames
 
 ```{r}
-setwd("C:/Users/Benny Panjaitan/Documents/GitHub/esp106-Naomi/final")
-household <- read.csv("csv/2017/household.csv")
-
-msatrip <- data.frame(household$MSACAT, household$CAR)
-
-ggplot2::ggplot(msatrip, aes(x=household.MSACAT, y=household.CAR)) +  
-  geom_bar(stat="identity")
+ggplot(msa_trip, aes(x=MSACAT, y=N, fill=TRIP)) +  
+  geom_bar(position="stack", stat="identity") +
+  facet_wrap(~MODE)  + 
+  labs(title="Trips Made in Metropolitan Area by Transportation Mode", 
+       y = "Number of Trips") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        axis.title.x = element_blank()) +
+  scale_y_continuous(label = scales::comma)
 ```
 

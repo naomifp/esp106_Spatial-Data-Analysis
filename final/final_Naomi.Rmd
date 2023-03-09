@@ -178,7 +178,7 @@ statistic1 <- summarize_data(
 statistic2 <- summarize_data(
   data = nhts_data,
   agg = "household_trip_rate",
-  by = c("HHSTFIPS","MSACAT"),
+  by = c("HHSTFIPS","CAR"),
   exclude_missing = TRUE
 )
 

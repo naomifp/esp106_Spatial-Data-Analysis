@@ -67,7 +67,7 @@ Install 'devtools' package to download NHTS data set from GitHub
 
 ```{r}
 # install.packages('devtools')
-devtools::install_github('Westat-Transportation/summarizeNHTS')
+# devtools::install_github('Westat-Transportation/summarizeNHTS')
 ```
 
 Download the NHTS 2017 data set to personal GitHub cloud storage
@@ -77,9 +77,9 @@ library(summarizeNHTS)
 
 setwd("C:/Users/Benny Panjaitan/Documents/GitHub/esp106-Naomi/final")
 
-download_nhts_data("2017", exdir="C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\final")
+# download_nhts_data("2017", exdir="C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\final")
 
-nhts_data <- read_data("2017", csv_path="C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\final")
+# nhts_data <- read_data("2017", csv_path="C:\\Users\\Benny Panjaitan\\Documents\\GitHub\\esp106-Naomi\\final")
 
 summary(nhts_data$data)
 ```
@@ -88,17 +88,10 @@ summary(nhts_data$data)
 nhts_data$data$household
 ```
 
-```{r}
-cd_var <- codebook_2017$variables
-cd_val <- codebook_2017$values
-car <- subset(cd_val, cd_val$NAME == "CAR")
-freq <- as.vector(car[4:8,3])
-```
-
-
+Storing data summary of household trips count made in different Metropolitan arean based on transportation mode
 
 ```{r}
-msa_trip <- summarize_data(
+msatrip_sum <- summarize_data(
     data = nhts_data,
     agg = "trip_count",
     label = TRUE,
@@ -106,20 +99,49 @@ msa_trip <- summarize_data(
 )
 ```
 
+Tidying up the data frame
+
+1. Removing columns containing these values
+
+"W" (Weighted statistic),
+
+"E" (Standard error of the weighted statistic),
+
+"S" (Surveyed/sampled statistic), and
+
+Keeping the column of "N" (Number of observations/sample size) to show the value of trips made.
+
 ```{r}
-msa_trip <- msa_trip[,-8:-10]
-catg <- catg[-1]
-freq
+msa_trip <- msatrip_sum[,-8:-10]
+head(msa_trip)
 ```
+
+2. Combining multiple columns of all transportation mode into one column to show what mode used in the trip, under the column of "MODE"
 
 ```{r}
 msa_trip <- tidyr::gather(msa_trip, key="MODE", value="TRIP", 2:7)
-msa_trip <- subset(msa_trip, TRIP %in% c("Daily", "A few times a week", "A few times a month", "A few times a year", "Never"))
+head(msa_trip)
+```
 
+3. Keeping only trip frequencies, eliminating all unknown or unspecified trip frequencies
+
+```{r}
+msa_trip <- subset(msa_trip, TRIP %in% c("Daily", "A few times a week", "A few times a month", "A few times a year", "Never"))
+head(msa_trip)
+```
+
+4. Replacing strings in MSACAT column into simpler wording (**PENDING**)
+
+```{r}
+# msa_trip$MSACAT <- replace(msa_trip$MSACAT, msa_trip$MSACAT == "MSA of 1 million or more, with rail", msa_trip$MSACAT == "MSA ≥ 1 million, with rail")
+
+# msa_trip <- msa_trip$MSACAT[msa_trip$MSACAT == 'MSA of 1 million or more, and not in 1'] <- 'MSA ≥ 1 million, no rail'
+# msa_trip <- msa_trip$MSACAT[msa_trip$MSACAT == 'MSA less than 1 million'] <- 'MSA < 1 million'
+# msa_trip <- msa_trip$MSACAT[msa_trip$MSACAT == 'Not in MSA '] <- 'Not MSA'
 ```
 
 
-Make data frames
+Plotting the number of trips made in different metropolitan area category by transportation mode use.
 
 ```{r}
 ggplot(msa_trip, aes(x=MSACAT, y=N, fill=TRIP)) +  
@@ -128,7 +150,8 @@ ggplot(msa_trip, aes(x=MSACAT, y=N, fill=TRIP)) +
   labs(title="Trips Made in Metropolitan Area by Transportation Mode", 
        y = "Number of Trips") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
-        axis.title.x = element_blank()) +
-  scale_y_continuous(label = scales::comma)
+        axis.title.x = element_blank()) + 
+        scale_x_discrete(label = function(MSACAT) lapply(strwrap(MSACAT, width = 20, simplify = FALSE), paste, collapse="\n")) +
+        scale_y_continuous(label = scales::comma)
 ```
 

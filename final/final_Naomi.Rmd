@@ -66,8 +66,8 @@ GitHub](https://github.com/Westat-Transportation/summarizeNHTS.git)
 Install 'devtools' package to download NHTS data set from GitHub
 
 ```{r}
-# install.packages('devtools')
-# devtools::install_github('Westat-Transportation/summarizeNHTS')
+#install.packages('devtools')
+#devtools::install_github('Westat-Transportation/summarizeNHTS')
 ```
 
 Download the NHTS 2017 data set to personal GitHub cloud storage
@@ -85,15 +85,26 @@ summary(nhts_data$data)
 ```
 
 ```{r}
+# 2017 variables table
+cb_var <- codebook_2017$variables
+```
+
+```{r}
+# 2017 values table
+head(codebook_2017$values)
+```
+
+
+```{r}
 nhts_data$data$household
 ```
 
-Storing data summary of household trips count made in different Metropolitan arean based on transportation mode
+Storing data summary of household trips count made in different Metropolitan area based on transportation mode
 
 ```{r}
 msatrip_sum <- summarize_data(
     data = nhts_data,
-    agg = "trip_count",
+    agg = "household_trip_rate",
     label = F,
     by = c("MSACAT","CAR","TAXI","WALK","BIKE","BUS","TRAIN")
 )
@@ -103,16 +114,16 @@ Tidying up the data frame
 
 1. Removing columns containing these values
 
-"W" (Weighted statistic),
-
 "E" (Standard error of the weighted statistic),
 
-"S" (Surveyed/sampled statistic), and
+"S" (Surveyed/sampled statistic), and 
 
-Keeping the column of "N" (Number of observations/sample size) to show the value of trips made.
+"N" (Number of observations/sample size)
+
+Keeping the column of "W" (Weighted statistic) to show a sample unit proportionally to the population.
 
 ```{r}
-msa_trip <- msatrip_sum[,-8:-10]
+msa_trip <- msatrip_sum[,-9:-11]
 head(msa_trip)
 ```
 
@@ -130,28 +141,52 @@ msa_trip <- subset(msa_trip, TRIP %in% c("01", "02", "03", "04", "05"))
 head(msa_trip)
 ```
 
-4. Replacing strings in MSACAT column into simpler wording (**PENDING**)
-
-```{r}
-
-# function(MSACAT) lapply(strwrap(MSACAT, width = 20, simplify = FALSE), paste, collapse="\n")) 
-```
-
 
 Plotting the number of trips made in different metropolitan area category by transportation mode use.
 
 ```{r}
 msa_trip %>%
-ggplot(aes(x=MSACAT, y=N, fill=TRIP)) +  
+ggplot(aes(x=MSACAT, y=W, fill=TRIP)) +  
   geom_bar(position="stack", stat="identity") +
   facet_wrap(~MODE)  + 
-  labs(title="Trips Made in Metropolitan Area by Transportation Mode", 
-       y = "Number of Trips", x = element_blank()) +
+  labs(title="Household Trips in Metropolitan Area by Transportation Mode", 
+       y = "Household Trips Rate", x = element_blank()) +
   scale_fill_discrete(name ="Trip Frequency", labels =c("Daily", "Once in a week", "Once in a month", "Once in a year", "Never")) +
   scale_x_discrete(labels = c("MSA ≥ 1 million,\n with rail", "MSA ≥ 1 million,\n no rail", "MSA < 1 million", "Not MSA")) +
   scale_y_continuous(label = scales::comma) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 ```
 
+```{r}
+statistic <- summarize_data(
+  data = nhts_data,
+  agg = "household_trip_rate",
+  by = "HHSTFIPS"
+)
 
+make_map(statistic)
+```
+
+```{r}
+statistic1 <- summarize_data(
+  data = nhts_data,
+  agg = "household_trip_rate",
+  by = "HHSTFIPS",
+  exclude_missing = TRUE
+)
+
+statistic2 <- summarize_data(
+  data = nhts_data,
+  agg = "household_trip_rate",
+  by = c("HHSTFIPS","MSACAT"),
+  exclude_missing = TRUE
+)
+
+map <- make_map(
+  tbl = statistic1, 
+  tbl2 = statistic2
+)
+
+map
+```
 

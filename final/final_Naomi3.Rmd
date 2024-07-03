@@ -36,8 +36,8 @@ GitHub](https://github.com/Westat-Transportation/summarizeNHTS.git) that is made
 Please note that to access the summarize NHTS data from Westat GitHub repository, R package of devtools is needed to be installed first, then "summarizeNHTS" package could be installed from their GitHub.
 
 ```{r}
-#install.packages('devtools')
-#devtools::install_github('Westat-Transportation/summarizeNHTS')
+install.packages('devtools')
+devtools::install_github('Westat-Transportation/summarizeNHTS')
 library(summarizeNHTS)
 library(terra)
 library(sf)

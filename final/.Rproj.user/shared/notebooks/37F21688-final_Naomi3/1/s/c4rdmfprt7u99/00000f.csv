@@ -1,0 +1,67 @@
+"0","#install.packages('devtools')"
+"0","#devtools::install_github('Westat-Transportation/summarizeNHTS')"
+"0","library(summarizeNHTS)"
+"2","Loading required package: ggplot2
+"
+"2","
+summarizeNHTS 0.0.0.9000
+"
+"2","============================================
+"
+"2","See GitHub page for more information about the package: https://github.com/Westat-Transportation/summarizeNHTS
+"
+"2","For more information about the National Household Travel Survey (NHTS): http://nhts.ornl.gov/
+
+"
+"0","library(terra)"
+"2","terra 1.7.9
+"
+"0","library(sf)"
+"2","Linking to GEOS 3.9.3, GDAL 3.5.2, PROJ 8.2.1; sf_use_s2() is TRUE
+"
+"0","library(ggplot2)"
+"0","library(tidyr)"
+"2","
+Attaching package: ‘tidyr’
+
+"
+"2","The following object is masked from ‘package:terra’:
+
+    extract
+
+"
+"0","library(dplyr)"
+"2","
+Attaching package: ‘dplyr’
+
+"
+"2","The following objects are masked from ‘package:terra’:
+
+    intersect, union
+
+"
+"2","The following object is masked from ‘package:summarizeNHTS’:
+
+    select_all
+
+"
+"2","The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+"
+"2","The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+"
+"0","library(scales)"
+"2","
+Attaching package: ‘scales’
+
+"
+"2","The following object is masked from ‘package:terra’:
+
+    rescale
+
+"

@@ -1,0 +1,7 @@
+"0","perc_freq <- train_sum %>% "
+"0","  group_by(TRAIN) %>% # Variable to be transformed"
+"0","  count() %>% "
+"0","  ungroup() %>% "
+"0","  mutate(perc = `n` / sum(`n`)) %>% "
+"0","  arrange(perc) %>%"
+"0","  mutate(labels = scales::percent(perc))"

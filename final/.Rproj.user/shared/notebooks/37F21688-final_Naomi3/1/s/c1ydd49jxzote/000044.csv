@@ -1,0 +1,7 @@
+"0","ggplot() + "
+"0","  ggspatial::annotation_map_tile(alpha = 0.3) +"
+"0","  geom_sf(data = stops_income, aes(color = Income)) +"
+"0","  geom_sf(data = route) + "
+"0","  theme(axis.text = element_blank(),"
+"0","        axis.ticks = element_blank()) +"
+"0","  labs(title=""Household Income around SacRT Light Rail Stops"")"

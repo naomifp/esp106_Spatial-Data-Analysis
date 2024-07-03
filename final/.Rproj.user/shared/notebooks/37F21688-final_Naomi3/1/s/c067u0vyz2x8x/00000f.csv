@@ -1,0 +1,4 @@
+"0","route <- read_sf(""csv/data/lr_routes/Light_Rail_Routes.shp"") %>% "
+"0","  st_transform(6417)"
+"0","stops <- read_sf(""csv/data/lr_stations.geojson"") %>% "
+"0","  st_transform(6417)"

@@ -1,0 +1,4 @@
+"0","county <- vect(""csv/tl_2022_us_county/tl_2022_us_county.shp"")"
+"2","Error in vect(""csv/tl_2022_us_county/tl_2022_us_county.shp"") : 
+  could not find function ""vect""
+"

@@ -1,0 +1,6 @@
+"0","nhts_sum <- summarize_data("
+"0","    data = nhts,"
+"0","    agg = ""household_trip_rate"","
+"0","    label = F,"
+"0","    by = c(""HHSTATE"", ""TRAIN"", ""HHFAMINC"", ""RAIL"")"
+"0",")"

@@ -1,0 +1,8 @@
+"0","train_ca <- subset(train, HHSTATE == ""CA"")"
+"0",""
+"0","ggplot(aes(x=HHFAMINC, y=W, fill=TRAIN)) +  "
+"0","  geom_bar(position=""stack"", stat=""identity"") +"
+"0","  labs(title=""Household Train Trips in California"", "
+"0","       y = ""Household Trips"", x = ""Household Income"") +"
+"0","  scale_fill_discrete(name =""Trip Frequency"", labels =c(""Daily"", ""Once in a week"", ""Once in a month"", ""Once in a year"", ""Never"")) +"
+"0","  scale_x_discrete(labels = c(""Less than \n $25,000"", ""$25,000 \nto $49,999"", ""$50,000 \nto $74,999"", ""$75,000 \nto $99,999"", ""$100,000 \nor more""))"

@@ -1,0 +1,8 @@
+"0","train_sum %>%"
+"0","ggplot(aes(x=HHSTATE, y=W, fill=TRAIN)) +  "
+"0","  geom_bar(position=""fill"", stat=""identity"") +"
+"0","  labs(title=""Household Train Trips in the United States"", "
+"0","       y = ""Household Trips"", x = ""State"") +"
+"0","  scale_fill_discrete(name =""Trip Frequency"", labels = c(""Daily"", ""Once in a week"", ""Once in a month"", ""Once in a year"", ""Never"")) +"
+"0","  scale_y_continuous(label = scales::comma) +"
+"0","  coord_flip ()"

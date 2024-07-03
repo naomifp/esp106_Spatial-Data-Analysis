@@ -80,6 +80,9 @@ Q4b. Describe the potential problem with the area assumption made in 4a. How mig
 **Answer:**
 Because all grid cells are assumed to have same size, they may be overlapping in each province's sizes. This may make the fractions not accurate. 
 The alternative way other than making that assumption is by computing the size of grid cells by terra::area function.
+answer: problem is grid cells are actually have different sizes because the globe shape is round.. northern part may be smaller in cell size
+context: no big deal with china because not too north
+solution: computing the cells size then find the mean from all cells
 
 
 Q4c. Sum up the fractions in the four land cover classes for each province and plot these as a histogram. (2 points) 
@@ -87,6 +90,7 @@ Q4c. Sum up the fractions in the four land cover classes for each province and p
 ```{r}
 #calculating the total of land coverage specified by 2012 MODIS satellite data 
 china.df$Total <- rowSums(china.df[,2:5])
+#or apply(china.df[,2:5], 1, sum)
 
 #plotting the frequencies of land coverage in China
 hist(china.df$Total, main="Land Coverage in China", xlab="Fraction of Land Coverage")
@@ -146,6 +150,7 @@ Q6b) Use ggplot. (4 points)
 
 ```{r}
 ch.df <- tidyr::pivot_longer(china.df, cols=2:6, values_to="Fraction", names_to="Land_Use")
+#or reshape(china.df, vaarying=nms, times=nms, v.names="fraction", direction="long", timevar="landuse")
 
 library(ggplot2)
 ggplot(ch.df, aes(x=Province, y=Fraction, fill=Land_Use)) +
